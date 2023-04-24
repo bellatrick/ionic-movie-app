@@ -3,5 +3,27 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "react-vite"
+  "type": "react-vite",
+  "plugins": {
+    "sass": {
+      "mode": "native",
+      "options": {
+        "postcss": {
+          "plugins": [
+            {
+              "name": "postcss-import"
+            },
+            {
+              "name": "tailwindcss",
+              "options": "./tailwind.config.js"
+            },
+            {
+              "name": "autoprefixer"
+            }
+          ]
+        }
+      }
+    }
+  }
+  
 }

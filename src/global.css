@@ -1,0 +1,145 @@
+/* global styles */
+ion-content {
+  --background: #141414;
+  --color: #fff;
+}
+
+/* home page styles */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.home-container h1 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+/* movie list styles */
+.movie-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
+}
+
+.movie-item {
+  position: relative;
+}
+
+.movie-item ion-img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.movie-item .movie-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 10px;
+  text-align: start;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+/* movie details styles */
+.movie-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.movie-details .text-wrapper {
+  margin: 0 auto;
+}
+.title {
+  margin-left: 20px;
+  color: #838181;
+}
+ion-button {
+  --background: #5c5b5b;
+  --color: white;
+  margin-left: 10px;
+}
+.movie-details h2 {
+  font-size: 1.5rem;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.movie-details p {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 40ch;
+}
+.movie-details img {
+  border-radius: 20px;
+  height: 100%;
+  width: 100%;
+  max-height: 400px;
+  max-width: 400px;
+  object-fit: cover;
+}
+.movie-details .rating {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  gap: 5px;
+  place-items: center;
+}
+.movie-details .release-date {
+  color: #5c5b5b;
+}
+
+.movie-details .rating ion-icon {
+  color: #fbc02d;
+  margin-right: 10px;
+}
+
+/* search bar styles */
+.search-container {
+  padding: 20px;
+}
+.toolbar-container {
+  display: flex;
+  justify-content: start;
+  padding: 10px 40px 10px 0px;
+}
+.search-input {
+  width: 400px;
+}
+ion-toolbar {
+  display: flex !important;
+}
+/* error message styles */
+.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.error-message h1 {
+  font-size: 2rem;
+  margin-right: 20px;
+}
+
+/* loading indicator styles */
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-indicator ion-spinner {
+  --color: #fff;
+}
