@@ -8,6 +8,7 @@ import {
   IonSearchbar,
   SearchbarChangeEventDetail,
   IonPage,
+  IonLoading,
 } from "@ionic/react";
 import axios from "axios";
 import { MovieProps } from "../type";
@@ -16,8 +17,7 @@ import { TMDB_KEY } from "../env";
 import debounce from "lodash.debounce";
 const App = () => {
   const [movies, setMovies] = useState<MovieProps[]>([]);
-  const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
@@ -30,10 +30,12 @@ const App = () => {
   }, []);
 
   const searchMovies = async (searchText: string) => {
+    setLoading(true)
     const response = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${searchText}`
     );
     const data = await response.json();
+    setLoading(false)
     return data.results;
   };
 
@@ -41,43 +43,43 @@ const App = () => {
     async (event: CustomEvent<SearchbarChangeEventDetail>) => {
       const text = event.detail.value || "";
       if (text.length === 0) {
-        setSearchResults([]);
         return;
       }
       try {
         const results = await searchMovies(text);
-        setSearchResults(results);
+        setMovies(results);
       } catch (error) {
         console.log(error);
       }
     },
-    500
+    100
   );
 
   return (
-  <IonPage>
+    <IonPage>
+      <IonLoading isOpen={loading} message={"Searching..."} duration={2000} />
       <IonApp>
-      <IonHeader>
-        <IonToolbar>
-          <div className="toolbar-container">
-            <IonTitle>Latest Movies</IonTitle>
-            <IonSearchbar
-              placeholder="Search movies..."
-              onIonChange={handleSearch}
-              className="search-input"
-            ></IonSearchbar>
+        <IonHeader>
+          <IonToolbar>
+            <div className="toolbar-container">
+              <IonTitle>Latest Movies</IonTitle>
+              <IonSearchbar
+                placeholder="Search movies..."
+                onIonChange={handleSearch}
+                className="search-input"
+              ></IonSearchbar>
+            </div>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <div className="movie-container">
+            {movies.map((movie) => (
+              <MovieCard key={movie.id} movie={movie} />
+            ))}
           </div>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <div className="movie-container">
-          {movies.map((movie) => (
-            <MovieCard key={movie.id} movie={movie} />
-          ))}
-        </div>
-      </IonContent>
-    </IonApp>
-  </IonPage>
+        </IonContent>
+      </IonApp>
+    </IonPage>
   );
 };
 
