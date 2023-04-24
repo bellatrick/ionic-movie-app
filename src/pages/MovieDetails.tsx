@@ -15,10 +15,18 @@ import {
   IonButton,
   IonIcon,
   IonLoading,
+  IonToast,
 } from "@ionic/react";
-import { arrowBack, star, starHalf, starOutline } from "ionicons/icons";
+import {
+  arrowBack,
+  bookmarkOutline,
+  star,
+  starHalf,
+  starOutline,
+} from "ionicons/icons";
 import axios from "axios";
 import { TMDB_KEY } from "../env";
+import { MovieProps } from "../type";
 
 interface MovieDetails {
   id: number;
@@ -33,8 +41,13 @@ interface MovieDetails {
 }
 
 const MovieDetails: React.FC = () => {
+  let watchlist: MovieProps[] = localStorage.getItem("watchlist")
+    ? JSON.parse(localStorage.getItem("watchlist")!)
+    : [];
   const { id } = useParams<{ id: string }>();
   const [movieDetails, setMovieDetails] = useState<MovieDetails | null>(null);
+  const [showSuccessToast, setshowSuccessToast] = useState<boolean>(false);
+  const [message, setMessage] = useState({ present: false, message: "" });
   const history = useHistory();
 
   useEffect(() => {
@@ -51,6 +64,27 @@ const MovieDetails: React.FC = () => {
 
     fetchMovieDetails();
   }, [id]);
+  const handleSaveToWatchList = () => {
+    const movieId = movieDetails?.id;
+    const isMovieInWatchlist = watchlist.find(
+      (movie: any) => movie.id === movieId
+    );
+    setshowSuccessToast(true);
+    if (isMovieInWatchlist) {
+      setMessage({
+        message: "This movie has already been bookmarked",
+        present: true,
+      });
+    }
+    if (!isMovieInWatchlist) {
+      const newList = [...watchlist, movieDetails];
+      localStorage.setItem("watchlist", JSON.stringify(newList));
+      setMessage({
+        message: "Movie has been successfully bookmarked",
+        present: false,
+      });
+    }
+  };
 
   if (!movieDetails) {
     return (
@@ -77,21 +111,40 @@ const MovieDetails: React.FC = () => {
   }
   return (
     <IonPage>
+      <IonToast
+        isOpen={showSuccessToast}
+        message={message.message}
+        onDidDismiss={() => setshowSuccessToast(false)}
+        duration={5000}
+        position="top"
+        animated={true}
+        color={message.present ? "medium" : "success"}
+      ></IonToast>
       <IonHeader>
         <IonToolbar>
           <IonButton onClick={() => history.goBack()} slot="start">
             <IonIcon icon={arrowBack} />
           </IonButton>
-          <h1 className="title">Details</h1>
+          <h1 className="title">{movieDetails.title}</h1>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         {movieDetails && (
           <div className="movie-details">
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
-              alt={`${movieDetails.title} poster`}
-            />
+            <div className="img-wrapper">
+              {" "}
+              <IonIcon
+                icon={bookmarkOutline}
+                slot="start"
+                color={showSuccessToast ? "success" : "medium"}
+                onClick={handleSaveToWatchList}
+                className="bookmark"
+              />
+              <img
+                src={`https://image.tmdb.org/t/p/w500/${movieDetails.poster_path}`}
+                alt={`${movieDetails.title} poster`}
+              />
+            </div>
             <div className="text-wrapper">
               <h2>{movieDetails.title}</h2>
               <p className="release-date">
