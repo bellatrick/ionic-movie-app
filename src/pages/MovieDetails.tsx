@@ -25,7 +25,6 @@ import {
   starOutline,
 } from "ionicons/icons";
 import axios from "axios";
-import { TMDB_KEY } from "../env";
 import { MovieProps } from "../type";
 
 interface MovieDetails {
@@ -54,7 +53,7 @@ const MovieDetails: React.FC = () => {
     const fetchMovieDetails = async () => {
       try {
         const response = await axios.get(
-          `https://api.themoviedb.org/3/movie/${id}?api_key=${TMDB_KEY}`
+          `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}`
         );
         setMovieDetails(response.data);
       } catch (error) {

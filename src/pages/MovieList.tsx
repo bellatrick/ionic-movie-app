@@ -13,7 +13,6 @@ import {
 import axios from "axios";
 import { MovieProps } from "../type";
 import MovieCard from "../components/MovieCard";
-import { TMDB_KEY } from "../env";
 import debounce from "lodash.debounce";
 const App = () => {
   const [movies, setMovies] = useState<MovieProps[]>([]);
@@ -21,7 +20,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${TMDB_KEY}&language=en-US&page=1`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
       );
       setMovies(response.data.results);
     };
@@ -32,7 +31,7 @@ const App = () => {
   const searchMovies = async (searchText: string) => {
     setLoading(true)
     const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${searchText}`
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_TMDB_KEY}&query=${searchText}`
     );
     const data = await response.json();
     setLoading(false)
